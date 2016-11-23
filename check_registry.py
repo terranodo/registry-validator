@@ -265,7 +265,7 @@ if __name__ == "__main__":
     for line in sys.stdin:
         uuid = line.rstrip()
 
-        valid_bbox, valid_config, valid_image = check_layer(uuid) 
+        valid_bbox, valid_config, valid_image, check_color = check_layer(uuid)
 
-        output = '%s %s %s %s %s\n' % (uuid, valid_bbox, valid_config, valid_image,check_color)
+        output = '%s %s %s %s %s\n' % (uuid, valid_bbox, valid_config, valid_image, check_color)
         sys.stdout.write(output)
