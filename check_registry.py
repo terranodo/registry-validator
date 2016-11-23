@@ -193,14 +193,25 @@ def create_mapproxy_image(yaml_file, img_file):
 
     try:
         app_iter = app(environ, start_response)
-    except AttributeError:
+    except:
         return 1
 
     if app_iter is None:
         return 1
-    
-    with open(img_file, 'wb') as img:
-        img.write(app_iter.next())
+
+    try:
+        with open(img_file, 'wb') as img:
+            img.write(app_iter.next())
+    except:
+        return 1
+
+    content = 'error'
+    with open(img_file, 'rb') as img:
+        content = img.read()
+
+    if 'error' in content:
+        os.remove(img_file)
+        return 1
 
     return 0
 
