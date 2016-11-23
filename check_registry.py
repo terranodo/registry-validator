@@ -150,11 +150,11 @@ def environ_from_url(path):
 def get_path_info_params(yaml_text):
     sources = yaml_text['sources']['default_source']
     bbox_req = '-180,-90,180,90'
-    if 'coverage' in sources:
-        coverage = yaml_text['sources']['default_source']['coverage']
-        bbox_req = ','.join([str(f) for f in coverage['bbox']])
 
-    if 'layers'in yaml_text:
+    if 'services' in yaml_text:
+        bbox_req = yaml_text['services']['wms']['bbox']
+
+    if 'layers' in yaml_text:
         lay_name = yaml_text['layers'][0]['name']
 
     return bbox_req, lay_name
@@ -179,6 +179,11 @@ def create_mapproxy_image(yaml_file, img_file):
     path_info = ('/service?LAYERS={0}&FORMAT=image%2Fpng&SRS=EPSG%3A4326'
                  '&EXCEPTIONS=application%2Fvnd.ogc.se_inimage&TRANSPARENT=TRUE&SERVICE=WMS&VERSION=1.1.1&'
                  'REQUEST=GetMap&STYLES=&BBOX={1}&WIDTH=200&HEIGHT=150').format(lay_name, bbox_req)
+
+    print path_info
+
+    print "LAYERS=46&FORMAT=image%2Fpng&SRS=EPSG%3A4326&EXCEPTIONS=application%2Fvnd.ogc.se_inimage&TRANSPARENT=TRUE&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&BBOX=-76.3437,38.4496,-76.0830,38.8083&WIDTH=200&HEIGHT=150"
+
     conf_options = load_default_config()
     # Merge both
     load_config(conf_options, config_dict=yaml_text)
