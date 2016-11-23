@@ -6,7 +6,7 @@ import sys
 import shutil
 import requests
 import yaml
-
+import PIL.Image
 from mapproxy.config.config import load_default_config, load_config
 from mapproxy.config.loader import ProxyConfiguration
 from mapproxy.wsgiapp import MapProxyApp
@@ -227,6 +227,16 @@ def layer_image(uuid, mapproxy_conf, folder):
     
     return create_mapproxy_image(mapproxy_conf, png_file)
 
+def check_image(uuid,folder):
+    img=PIL.Image.open(os.path.join(folder, '%s.png' % uuid))
+    hist=img.histogram()
+    #if it is white
+    if hist[0]==sum(hist):
+        return 1
+    #if it is black
+    if hist[255]==sum(hist):
+        return 1
+    return 0
 
 def check_layer(uuid, registry_url=REGISTRY_URL, yml_folder='yml', xml_folder='xml', png_folder='png'):
 
@@ -241,7 +251,13 @@ def check_layer(uuid, registry_url=REGISTRY_URL, yml_folder='yml', xml_folder='x
     else:
         valid_image = layer_image(uuid, os.path.join(yml_folder, '%s.yml' % uuid), png_folder)
 
-    return valid_bbox, valid_config, valid_image
+    if valid_image ==1:
+        check_color = 1
+    else:
+        check_color = check_image(uuid,png_folder)
+
+
+    return valid_bbox, valid_config, valid_image , check_color
 
 
 if __name__ == "__main__":
@@ -251,5 +267,5 @@ if __name__ == "__main__":
 
         valid_bbox, valid_config, valid_image = check_layer(uuid) 
 
-        output = '%s %s %s %s\n' % (uuid, valid_bbox, valid_config, valid_image)
+        output = '%s %s %s %s %s\n' % (uuid, valid_bbox, valid_config, valid_image,check_color)
         sys.stdout.write(output)
