@@ -180,10 +180,6 @@ def create_mapproxy_image(yaml_file, img_file):
                  '&EXCEPTIONS=application%2Fvnd.ogc.se_inimage&TRANSPARENT=TRUE&SERVICE=WMS&VERSION=1.1.1&'
                  'REQUEST=GetMap&STYLES=&BBOX={1}&WIDTH=200&HEIGHT=150').format(lay_name, bbox_req)
 
-    print path_info
-
-    print "LAYERS=46&FORMAT=image%2Fpng&SRS=EPSG%3A4326&EXCEPTIONS=application%2Fvnd.ogc.se_inimage&TRANSPARENT=TRUE&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&BBOX=-76.3437,38.4496,-76.0830,38.8083&WIDTH=200&HEIGHT=150"
-
     conf_options = load_default_config()
     # Merge both
     load_config(conf_options, config_dict=yaml_text)
